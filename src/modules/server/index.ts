@@ -42,7 +42,7 @@ export class AppServer {
             process.exit(1);
         }
 
-        this.server.listen(process.env.port, async (err, address) => {
+        this.server.listen(Number(process.env.port), '0.0.0.0', async (err, address) => {
             if (err) {
                 this.server.log.error(err.message);
                 await DataBase.getInstance().db.disconnect();

@@ -1,10 +1,12 @@
 import * as fastify from 'fastify';
 import { Server } from 'http';
 import {User} from "../../controllers/users";
+import {Company} from "../../controllers/company";
 
 export class Routes<Server> {
     private server: fastify.FastifyInstance<Server>;
     private userController = User.getInstance();
+    private companyController = Company.getInstance();
 
     constructor(server) {
         this.server = server;
@@ -32,5 +34,69 @@ export class Routes<Server> {
         this.server.post(`/v1/user/update`, {
             beforeHandler: [this.userController.tokenVerificationHook]
         }, this.userController.updateUser);
+
+        //Company routes
+
+        //EXAMPLE OF BODY
+        // TOKEN IS REQUIRED
+        // {
+        //     "user": {
+        //     "_id": "5bf56674ad7be6212e190c58"
+        // },
+        //     "userId": "5bf56674ad7be6212e190c58"
+        // }
+        this.server.post(`/v1/user/company`, {
+            beforeHandler: [this.userController.tokenVerificationHook]
+        }, this.companyController.getCompany);
+
+        //EXAMPLE OF BODY
+        // TOKEN IS REQUIRED
+        // {
+        //     "user": {
+        //     "_id": "5bf56674ad7be6212e190c58"
+        // },
+        //     "userId": "5bf56674ad7be6212e190c58",
+        //     "companyName": "Roga i kopyta",
+        //     "type": "PE",
+        //     "inn": "12345",
+        //     "address": "nowhere street",
+        //     "phone": "12345",
+        //     "ceo": "Kuklin",
+        //     "accountant": "Kuklina"
+        // }
+        this.server.post(`/v1/user/company/add`, {
+            beforeHandler: [this.userController.tokenVerificationHook]
+        }, this.companyController.addCompany);
+
+        //EXAMPLE OF BODY
+        // TOKEN IS REQUIRED
+        // {
+        //     "user": {
+        //     "_id": "5bf56674ad7be6212e190c58"
+        // },
+        //     "userId": "5bf56674ad7be6212e190c58",
+        //     "companyName": "Roga i kopyta",
+        //     "type": "PE",
+        //     "inn": "12345",
+        //     "address": "nowhere street",
+        //     "phone": "12345",
+        //     "ceo": "Kuklin",
+        //     "accountant": "Kuklina"
+        // }
+        this.server.post(`/v1/user/company/edit`, {
+            beforeHandler: [this.userController.tokenVerificationHook]
+        }, this.companyController.editCompany);
+
+        //EXAMPLE OF BODY
+        // TOKEN IS REQUIRED
+        // {
+        //     "user": {
+        //     "_id": "5bf56674ad7be6212e190c58"
+        // },
+        //     "userId": "5bf56674ad7be6212e190c58"
+        // }
+        this.server.post(`/v1/user/company/delete`, {
+            beforeHandler: [this.userController.tokenVerificationHook]
+        }, this.companyController.deleteCompany);
     }
 }
