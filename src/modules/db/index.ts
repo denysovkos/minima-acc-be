@@ -14,7 +14,7 @@ export class DataBase {
 
     connectToBd = async () => {
         try {
-            //LoalDB: 'mongodb://localhost:27017/minima_accounting'
+            //LocalDB: 'mongodb://localhost:27017/minima_accounting'
             return this.db = await connect(`mongodb://${process.env.db_user}:${process.env.db_pass}@ds253243.mlab.com:53243/minima_accounting`, {
                 useNewUrlParser: true
             });
