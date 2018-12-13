@@ -13,4 +13,9 @@ export const userModel = model<UserInterface & Document>('User', new Schema({
     hash: String,
     validated: Boolean,
     token: String,
+    partners: Array,
+    agreements: Array,
+    acts: Array,
+    invoices: Array,
+    notificationEvents: Array
 }));

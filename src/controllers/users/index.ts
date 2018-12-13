@@ -134,8 +134,7 @@ export class User {
         }
     };
 
-    tokenVerificationHook = async (request, reply, next) => {
-        console.log('BEFORE HOOK CALLED');
+    tokenVerificationHook = (request, reply, next) => {
         const token = request.headers['x-access-token'];
         const { user } = request.body;
         if (!this.verifyUserIds(token, user._id)) {

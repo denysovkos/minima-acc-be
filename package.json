@@ -25,11 +25,11 @@
   "dependencies": {
     "bcrypt": "^3.0.2",
     "cors": "^2.8.4",
-    "fastify": "^1.13.0",
+    "fastify": "^1.13.1",
     "hide-powered-by": "^1.0.0",
     "jsonwebtoken": "^8.3.0",
     "lodash": "^4.17.11",
-    "mongoose": "^5.3.8",
+    "mongoose": "^5.3.16",
     "nodemailer": "^4.6.8",
     "nodemailer-mailgun-transport": "^1.4.0",
     "pino": "^5.8.0",

@@ -8,4 +8,5 @@ export interface CompanyInterface {
     ceo: string;
     accountant?: string;
     _id?: string;
+    bankInfo: string;
 }
