@@ -110,6 +110,11 @@ export class User {
                         firstName: currentUser.firstName,
                         lastName: currentUser.lastName,
                         phone: currentUser.phone,
+                        partners: currentUser.partners || [],
+                        agreements: currentUser.agreements || [],
+                        acts: currentUser.acts || [],
+                        invoices: currentUser.invoices || [],
+                        notificationEvents: currentUser.notificationEvents || [],
                     }
                 });
             } else {

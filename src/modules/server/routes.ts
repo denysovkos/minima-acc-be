@@ -1,14 +1,15 @@
 import * as fastify from 'fastify';
-import { Server } from 'http';
 import {User} from "../../controllers/users";
 import {Company} from "../../controllers/company";
 import {Partners} from "../../controllers/partners";
+import {Agreements} from "../../controllers/agreements";
 
 export class Routes<Server> {
     private server: fastify.FastifyInstance<Server>;
     private userController = User.getInstance();
     private companyController = Company.getInstance();
     private partnersController = Partners.getInstance();
+    private agreementsController = Agreements.getInstance();
 
     constructor(server) {
         this.server = server;
@@ -171,5 +172,97 @@ export class Routes<Server> {
         this.server.post(`/v1/user/partners/remove`, {
             beforeHandler: [this.userController.tokenVerificationHook]
         }, this.partnersController.removeExistedPartner);
+
+        // ========= AGREEMENTS ROUTES ========================
+
+        //EXAMPLE OF BODY
+        // TOKEN IS REQUIRED
+        // {
+        //     "user": {
+        //     "_id": "5bf56674ad7be6212e190c58"
+        // },
+        //     "agreementIds": ["5bf56674ad7be6212e190c58"], --> array of agreements ids from USER
+        // }
+        this.server.post(`/v1/user/agreements/get`, {
+            beforeHandler: [this.userController.tokenVerificationHook]
+        }, this.agreementsController.getAgreements);
+
+        // ADD NEW AGREEMENT
+        //EXAMPLE OF BODY
+        // TOKEN IS REQUIRED
+        // {
+        //     "user": {
+        //     "_id": "5c1274f7dc282a17bd911750"
+        // },
+        //     "userId": "5c1274f7dc282a17bd911750",
+        //     "agreement": {
+        //     "partner": {
+        //             "companyName": "Якась назва",
+        //             "type": "PE",
+        //             "inn": "777",
+        //             "address": "ул. Семьи Сосниных 12, кв. 21",
+        //             "phone": "0673273071",
+        //             "ceo": "Константин",
+        //             "accountant": "Константин",
+        //             "__v": 0
+        //     },
+        //     "number": "1-2-3",
+        //         "date": "2016-05-18T16:00:00Z",
+        //         "name": "Main agreement",
+        //         "type": "services",
+        //         "shortDescription": "some text"
+        // }
+        // }
+        this.server.post(`/v1/user/agreements/add`, {
+            beforeHandler: [this.userController.tokenVerificationHook]
+        }, this.agreementsController.addAgreement);
+
+        // EDIT AGREEMENT
+        // ADD NEW AGREEMENT
+        //EXAMPLE OF BODY
+        // TOKEN IS REQUIRED
+        // {
+        //     "user": {
+        //     "_id": "5c1274f7dc282a17bd911750"
+        // },
+        //     "userId": "5c1274f7dc282a17bd911750",
+        //     "agreement": {
+        //     "_id": "5c20dd9859f130d91b6cd356",
+        //     "partner": {
+        //             "companyName": "Якась назва",
+        //             "type": "PE",
+        //             "inn": "777",
+        //             "address": "ул. Семьи Сосниных 12, кв. 21",
+        //             "phone": "0673273071",
+        //             "ceo": "Константин",
+        //             "accountant": "Константин",
+        //             "__v": 0
+        //     },
+        //     "number": "1-2-3",
+        //         "date": "2016-05-18T16:00:00Z",
+        //         "name": "Main agreement",
+        //         "type": "services",
+        //         "shortDescription": "some text"
+        // }
+        // }
+        this.server.post(`/v1/user/agreements/edit`, {
+            beforeHandler: [this.userController.tokenVerificationHook]
+        }, this.agreementsController.editAgreement);
+
+        // DELETE AGREEMENT
+        //EXAMPLE OF BODY
+        // TOKEN IS REQUIRED
+        // {
+        //     "user": {
+        //     "_id": "5c1274f7dc282a17bd911750"
+        // },
+        //     "userId": "5c1274f7dc282a17bd911750",
+        //     "agreement": {
+        //     "_id": "5c20dd9859f130d91b6cd356",
+        // }
+        // }
+        this.server.post(`/v1/user/agreements/remove`, {
+            beforeHandler: [this.userController.tokenVerificationHook]
+        }, this.agreementsController.removeAgreement);
     }
 }
