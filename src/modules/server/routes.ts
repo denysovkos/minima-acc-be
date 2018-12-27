@@ -3,6 +3,7 @@ import {User} from "../../controllers/users";
 import {Company} from "../../controllers/company";
 import {Partners} from "../../controllers/partners";
 import {Agreements} from "../../controllers/agreements";
+import {Acts} from "../../controllers/acts";
 
 export class Routes<Server> {
     private server: fastify.FastifyInstance<Server>;
@@ -10,6 +11,7 @@ export class Routes<Server> {
     private companyController = Company.getInstance();
     private partnersController = Partners.getInstance();
     private agreementsController = Agreements.getInstance();
+    private actsController = Acts.getInstance();
 
     constructor(server) {
         this.server = server;
@@ -264,5 +266,111 @@ export class Routes<Server> {
         this.server.post(`/v1/user/agreements/remove`, {
             beforeHandler: [this.userController.tokenVerificationHook]
         }, this.agreementsController.removeAgreement);
+
+        // ========= ACTS ROUTES ========================
+
+        //EXAMPLE OF BODY
+        // TOKEN IS REQUIRED
+        // {
+        //     "user": {
+        //     "_id": "5bf56674ad7be6212e190c58"
+        // },
+        //     "actIds": ["5bf56674ad7be6212e190c58"], --> array of act ids from USER
+        // }
+        this.server.post(`/v1/user/acts/get`, {
+            beforeHandler: [this.userController.tokenVerificationHook]
+        }, this.actsController.getActs);
+
+        // ADD NEW ACT
+        //EXAMPLE OF BODY
+        // TOKEN IS REQUIRED
+        // {
+        //     "user": {
+        //     "_id": "5c1274f7dc282a17bd911750"
+        // },
+        //     "userId": "5c1274f7dc282a17bd911750",
+        //     "act": {
+        //     partner: {
+        //         _id: "5c1274f7dc282a17bd911750",
+        //             companyName: "Koga i kopita",
+        //             inn: "1234455",
+        //             bankInfo: "Bank account",
+        //             address: "Where this company",
+        //             phone: "3423432",
+        //             ceo: "Ivanov",
+        //     },
+        //     date: Date,
+        //     number: String,
+        //     goods: [{
+        //         name: "Goroh",
+        //         units: "kg",
+        //         price: 50
+        //     }],
+        //         agreement: {
+        //             _id: "5c1274f7dc282a17bd911750",
+        //             number: "fdsfsd-10",
+        //             date: "10/03/1999",
+        //             name: "Postavka tovatu"
+        //     },
+        //     type: "Act realizacii tovaru",
+        // }
+        // }
+        this.server.post(`/v1/user/acts/add`, {
+            beforeHandler: [this.userController.tokenVerificationHook]
+        }, this.actsController.addActs);
+
+        // EDIT ACT
+        //EXAMPLE OF BODY
+        // TOKEN IS REQUIRED
+        // {
+        //     "user": {
+        //     "_id": "5c1274f7dc282a17bd911750"
+        // },
+        //     "userId": "5c1274f7dc282a17bd911750",
+        //     "act": {
+        //     partner: {
+        //         _id: "5c1274f7dc282a17bd911750",
+        //             companyName: "Koga i kopita",
+        //             inn: "1234455",
+        //             bankInfo: "Bank account",
+        //             address: "Where this company",
+        //             phone: "3423432",
+        //             ceo: "Ivanov",
+        //     },
+        //     date: Date,
+        //     number: String,
+        //     goods: [{
+        //         name: "Goroh",
+        //         units: "kg",
+        //         price: 50
+        //     }],
+        //         agreement: {
+        //             _id: "5c1274f7dc282a17bd911750",
+        //             number: "fdsfsd-10",
+        //             date: "10/03/1999",
+        //             name: "Postavka tovatu"
+        //     },
+        //     type: "Act realizacii tovaru",
+        // }
+        // }
+        this.server.post(`/v1/user/acts/edit`, {
+            beforeHandler: [this.userController.tokenVerificationHook]
+        }, this.actsController.editAct);
+
+        // DELETE ACT
+        //EXAMPLE OF BODY
+        // TOKEN IS REQUIRED
+        // {
+        //     "user": {
+        //     "_id": "5c1274f7dc282a17bd911750"
+        // },
+        //     "userId": "5c1274f7dc282a17bd911750",
+        //     "act": {
+        //         "_id": "5c20dd9859f130d91b6cd356",
+        //     }
+        // }
+        this.server.post(`/v1/user/acts/remove`, {
+            beforeHandler: [this.userController.tokenVerificationHook]
+        }, this.actsController.removeAct);
     }
 }

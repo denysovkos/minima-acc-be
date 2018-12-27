@@ -19,7 +19,5 @@ export const companyModel = model<CompanyInterface & Document>('Company', new Sc
     phone: String,
     ceo: String,
     accountant: String,
-    bankInfo: {
-        type: String,
-    }
+    bankInfo: String
 }));
