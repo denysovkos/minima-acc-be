@@ -75,7 +75,6 @@ export class User {
 
     authUser = async (request, reply) => {
         const {email, password} = request.body;
-        console.log('REQ BODY >>> ', request.body);
         if (!email || !password) {
             reply.code(500).send({
                 message: 'Email and password should be passed'

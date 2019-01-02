@@ -4,6 +4,7 @@ import {Company} from "../../controllers/company";
 import {Partners} from "../../controllers/partners";
 import {Agreements} from "../../controllers/agreements";
 import {Acts} from "../../controllers/acts";
+import {Invoices} from "../../controllers/invoices";
 
 export class Routes<Server> {
     private server: fastify.FastifyInstance<Server>;
@@ -12,6 +13,7 @@ export class Routes<Server> {
     private partnersController = Partners.getInstance();
     private agreementsController = Agreements.getInstance();
     private actsController = Acts.getInstance();
+    private invoicesController = Invoices.getInstance();
 
     constructor(server) {
         this.server = server;
@@ -372,5 +374,115 @@ export class Routes<Server> {
         this.server.post(`/v1/user/acts/remove`, {
             beforeHandler: [this.userController.tokenVerificationHook]
         }, this.actsController.removeAct);
+
+        // ========= INVOICES ROUTES ========================
+
+        //EXAMPLE OF BODY
+        // TOKEN IS REQUIRED
+        // {
+        //     "user": {
+        //     "_id": "5bf56674ad7be6212e190c58"
+        // },
+        //     "actIds": ["5bf56674ad7be6212e190c58"], --> array of act ids from USER
+        // }
+        this.server.post(`/v1/user/invoices/get`, {
+            beforeHandler: [this.userController.tokenVerificationHook]
+        }, this.invoicesController.getInvoices);
+
+        // ADD NEW ACT
+        //EXAMPLE OF BODY
+        // TOKEN IS REQUIRED
+        // {
+        //     "user": {
+        //     "_id": "5c1274f7dc282a17bd911750"
+        // },
+        //     "userId": "5c1274f7dc282a17bd911750",
+        //     "invoiceIds": ["5c2c98ae13935b0af0d26a14"],
+        //     "invoice": {
+        //     "date": "10/03/2019",
+        //         "number": "fds-kk-3232",
+        //         "partner": {
+        //         "_id": "5c128618fbde380a3a0b5242",
+        //             "companyName": "Roga i kopita",
+        //             "inn": "1234455",
+        //             "bankInfo": "Bank account",
+        //             "address": "Where this company",
+        //             "phone": "3423432",
+        //             "ceo": "Ivanov"
+        //     },
+        //     "goods": [
+        //         {
+        //             "name": "Sran",
+        //             "units": "litra",
+        //             "price": 10000
+        //         }
+        //     ],
+        //         "agreement": {
+        //         "_id": "5c20dd9859f130d91b6cd356",
+        //             "number": "fdsfsd-10",
+        //             "date": "10/03/1999",
+        //             "name": "Postavka tovatu"
+        //     }
+        // }
+        // }
+        this.server.post(`/v1/user/invoices/add`, {
+            beforeHandler: [this.userController.tokenVerificationHook]
+        }, this.invoicesController.addInvoices);
+
+        // EDIT ACT
+        //EXAMPLE OF BODY
+        // TOKEN IS REQUIRED
+        // {
+        //     "user": {
+        //     "_id": "5c1274f7dc282a17bd911750"
+        // },
+        //     "userId": "5c1274f7dc282a17bd911750",
+        //     "invoiceIds": ["5c2c98ae13935b0af0d26a14"],
+        //     "invoice": {
+        //     "date": "10/03/2019",
+        //         "number": "fds-kk-3232",
+        //         "partner": {
+        //         "_id": "5c128618fbde380a3a0b5242",
+        //             "companyName": "Roga i kopita",
+        //             "inn": "1234455",
+        //             "bankInfo": "Bank account",
+        //             "address": "Where this company",
+        //             "phone": "3423432",
+        //             "ceo": "Ivanov"
+        //     },
+        //     "goods": [
+        //         {
+        //             "name": "Sran",
+        //             "units": "litra",
+        //             "price": 10000
+        //         }
+        //     ],
+        //         "agreement": {
+        //         "_id": "5c20dd9859f130d91b6cd356",
+        //             "number": "fdsfsd-10",
+        //             "date": "10/03/1999",
+        //             "name": "Postavka tovatu"
+        //     }
+        // }
+        // }
+        this.server.post(`/v1/user/invoices/edit`, {
+            beforeHandler: [this.userController.tokenVerificationHook]
+        }, this.invoicesController.editInvoice);
+
+        // DELETE ACT
+        //EXAMPLE OF BODY
+        // TOKEN IS REQUIRED
+        // {
+        //     "user": {
+        //     "_id": "5c1274f7dc282a17bd911750"
+        // },
+        //     "userId": "5c1274f7dc282a17bd911750",
+        //     "invoice": {
+        //         "_id": "5c20dd9859f130d91b6cd356",
+        //     }
+        // }
+        this.server.post(`/v1/user/invoices/remove`, {
+            beforeHandler: [this.userController.tokenVerificationHook]
+        }, this.invoicesController.removeInvoice);
     }
 }
