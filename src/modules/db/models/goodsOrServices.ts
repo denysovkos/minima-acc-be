@@ -5,6 +5,7 @@ export const goodsOrServicesModel = model<Good & Service & Document>('GoodsOrSer
     name: String,
     units: String,
     type: String,
+    qtty: Number
 }));
 
 // type can be: goods | services

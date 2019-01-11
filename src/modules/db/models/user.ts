@@ -17,5 +17,7 @@ export const userModel = model<UserInterface & Document>('User', new Schema({
     agreements: Array,
     acts: Array,
     invoices: Array,
-    notificationEvents: Array
+    notificationEvents: Array,
+    goodsOrServices: Array,
+    warehouse: String
 }));

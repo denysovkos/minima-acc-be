@@ -5,6 +5,7 @@ import {Partners} from "../../controllers/partners";
 import {Agreements} from "../../controllers/agreements";
 import {Acts} from "../../controllers/acts";
 import {Invoices} from "../../controllers/invoices";
+import {GoodsOrServices} from "../../controllers/goodsOrServices";
 
 export class Routes<Server> {
     private server: fastify.FastifyInstance<Server>;
@@ -14,6 +15,7 @@ export class Routes<Server> {
     private agreementsController = Agreements.getInstance();
     private actsController = Acts.getInstance();
     private invoicesController = Invoices.getInstance();
+    private goodsOrServicesController = GoodsOrServices.getInstance();
 
     constructor(server) {
         this.server = server;
@@ -304,9 +306,11 @@ export class Routes<Server> {
         //     date: Date,
         //     number: String,
         //     goods: [{
+        //         _id: "45234532",
         //         name: "Goroh",
         //         units: "kg",
-        //         price: 50
+        //         price: 50,
+        //         qtty: 1
         //     }],
         //         agreement: {
         //             _id: "5c1274f7dc282a17bd911750",
@@ -484,5 +488,73 @@ export class Routes<Server> {
         this.server.post(`/v1/user/invoices/remove`, {
             beforeHandler: [this.userController.tokenVerificationHook]
         }, this.invoicesController.removeInvoice);
+
+        // ========= GOODS OR SERVICES ROUTES ========================
+
+        //EXAMPLE OF BODY
+        // TOKEN IS REQUIRED
+        // {
+        //     "user": {
+        //     "_id": "5bf56674ad7be6212e190c58"
+        // },
+        //     "goodOrServiceIds": ["5bf56674ad7be6212e190c58"], --> array of goods or services ids from USER
+        // }
+        this.server.post(`/v1/user/warehouse/get`, {
+            beforeHandler: [this.userController.tokenVerificationHook]
+        }, this.goodsOrServicesController.getGoodsOrServices);
+
+        // ADD NEW GOOD OR SERVICE
+        //EXAMPLE OF BODY
+        // TOKEN IS REQUIRED
+        // {
+        //     "user": {
+        //     "_id": "5c1274f7dc282a17bd911750"
+        // },
+        //     "userId": "5c1274f7dc282a17bd911750",
+        //     "invoiceIds": ["5c2c98ae13935b0af0d26a14"],
+        //     "goodOrService": {
+        //         "name": "muka",
+        //         "units": "kg",
+        //         "type": "goods | services",
+        //     }
+        // }
+        this.server.post(`/v1/user/warehouse/add`, {
+            beforeHandler: [this.userController.tokenVerificationHook]
+        }, this.goodsOrServicesController.addGoodsOrServices);
+
+        // EDIT GOOD OR SERVICE
+        //EXAMPLE OF BODY
+        // TOKEN IS REQUIRED
+        // {
+        //     "user": {
+        //     "_id": "5c1274f7dc282a17bd911750"
+        // },
+        //     "userId": "5c1274f7dc282a17bd911750",
+        //     "invoiceIds": ["5c2c98ae13935b0af0d26a14"],
+        //     "goodOrService": {
+        //         "name": "muka molotoya",
+        //         "units": "kg",
+        //         "type": "goods | services",
+        //     }
+        // }
+        this.server.post(`/v1/user/warehouse/edit`, {
+            beforeHandler: [this.userController.tokenVerificationHook]
+        }, this.goodsOrServicesController.editGoodOrService);
+
+        // DELETE GOOD OR SERVICE
+        //EXAMPLE OF BODY
+        // TOKEN IS REQUIRED
+        // {
+        //     "user": {
+        //     "_id": "5c1274f7dc282a17bd911750"
+        // },
+        //     "userId": "5c1274f7dc282a17bd911750",
+        //     "goodOrService": {
+        //         "_id": "5c20dd9859f130d91b6cd356",
+        //     }
+        // }
+        this.server.post(`/v1/user/warehouse/remove`, {
+            beforeHandler: [this.userController.tokenVerificationHook]
+        }, this.goodsOrServicesController.removeGoodOrService);
     }
 }

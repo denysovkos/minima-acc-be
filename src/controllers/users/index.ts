@@ -5,6 +5,7 @@ import * as uuid4 from 'uuid/v4';
 import * as jwt from 'jsonwebtoken';
 import { omit } from 'lodash';
 import {Mailer} from "../../modules/mailer";
+import {warehouseModel} from "../../modules/db/models/warehouse";
 
 export class User {
     private static userControllerInstance:User;
@@ -37,8 +38,18 @@ export class User {
         user.token = uuid4();
         user.validated = false;
 
+        //TODO: Optimize this
         const newUser = new userModel(user);
         const result = await newUser.save();
+        const usersWarehouse = new warehouseModel({
+            goods: [],
+            services: [],
+            userId: result._id,
+        });
+        const warehouse = await usersWarehouse.save();
+        await userModel.findOneAndUpdate({_id: result._id}, {
+            warehouse: warehouse._id.toString()
+        });
 
         await Mailer.getInstance().sendEmail(user.email, user.token);
 
